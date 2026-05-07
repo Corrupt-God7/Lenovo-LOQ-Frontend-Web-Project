@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --font-orbitron: var(--font-orbitron);
+  --font-rajdhani: var(--font-rajdhani);
+
+  --color-loq-black: #0b0f14;
+  --color-neon-cyan: #00ffff;
+  --color-electric-green: #00ff88;
+  --color-carbon-gray: #1c1f26;
+
+  --animate-fade-in: fade-in 0.5s ease-out;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-loq-black);
+    color: white;
+    font-family: var(--font-rajdhani), sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-orbitron), sans-serif;
+  }
+}
+
+/* Custom Utilities for Glassmorphism if needed */
+.glass {
+  background: rgba(11, 15, 20, 0.7);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+}
