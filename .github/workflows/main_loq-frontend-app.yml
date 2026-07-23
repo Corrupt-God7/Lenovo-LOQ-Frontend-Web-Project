@@ -1,47 +1,18 @@
-name: Build and deploy Node.js app to Azure Web App - LOQ-frontend-app
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - run: npm ci
-      - run: npm run build
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: app
-          path: .
-
-  deploy:
+deploy:
     runs-on: ubuntu-latest
     needs: build
-
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
         with:
-          name: app
+          name: node-app
 
-      - uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1EB4C51B16CC4B8CAE83A3510AF6763F }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_08BAFE87F8554D40BA95FF709F18A274 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5E7E584A984F478DAF633B0F0BD1EA73 }}
+      - name: Unzip artifact
+        run: unzip release.zip
 
-      - uses: azure/webapps-deploy@v3
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v3
         with:
-          app-name: LOQ-frontend-app
+          app-name: 'LOQ-frontend-app'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
